@@ -144,12 +144,14 @@ impl Formatter for EngFormatter {
                 }
 
                 let sign = if is_negative { "-" } else { "" };
+                let mut retval = format!("{sign}{}", val.round());
+                /*
                 let mut retval = match self.width as i32 - digits {
                     i32::MIN..=0 => format!("{sign}{}", val.round()),
                     1 => format!("{}{sign}{}", self.pad_with, val.round() as i64),
                     rest => format!("{sign}{val:.*}", rest as usize - 1),
                 };
-
+                */
                 let display_prefix =
                     !self.prefix_hidden && prefix != Prefix::One && prefix != Prefix::OneButBinary;
                 let display_unit = !self.unit_hidden && unit != Unit::None;
@@ -166,7 +168,8 @@ impl Formatter for EngFormatter {
                     }
                     retval.push_str(&unit.to_string());
                 }
-
+                
+                retval = format!("{:>1$}", retval, self.width);
                 Ok(retval)
             }
             other => Err(FormatError::IncompatibleFormatter {

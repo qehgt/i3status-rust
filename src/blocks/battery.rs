@@ -136,7 +136,7 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
         let mut info = device.get_info().await?;
 
         if let Some(info) = &mut info {
-            if info.capacity >= config.full_threshold {
+            if info.capacity >= config.full_threshold && info.status != BatteryStatus::Discharging {
                 info.status = BatteryStatus::Full;
             } else if info.capacity <= config.empty_threshold {
                 info.status = BatteryStatus::Empty;
